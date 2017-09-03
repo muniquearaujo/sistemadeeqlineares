@@ -6,7 +6,6 @@ FILE *fp;
 void zera(int m[NL][NC])
 {
 	int i,j,k,num;
-	k=0;
 	
 	for(j=0;j<NC;j++)
 	{
@@ -15,12 +14,14 @@ void zera(int m[NL][NC])
 			if(i>j)
 			{
 				num=-(m[i][j]/m[j][j]);
-				
-				m[i][k]=num*m[j][k]+m[i][k];
+				for(k=0;k<NC;k++)
+				{
+					m[i][k]=num*m[j][k]+m[i][k];
+				}
 			}
 		}
 	}	
-	printf("\n\nMatriz com os elementos da primeira coluna zerados, exceto o primeiro:\n");
+	printf("\n\nMatriz Triangular Superior:\n");
 	for(i=0;i<NL;i++)
 	{
 		for(j=0;j<NC;j++)
