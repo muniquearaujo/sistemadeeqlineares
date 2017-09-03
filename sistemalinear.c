@@ -10,12 +10,15 @@ main()
 	//Abrindo arquivo para escrita
 	fp=fopen("matriz.dat", "r"); 
 	
+	printf("\nMatriz:\n");
+	
 	for(i=0;i<NL;i++)
 	{
 		for(j=0;j<NC;j++)
 		{
 			fscanf(fp, "%d", &m[i][j]); //lendo "scanf" cada um do arquivo e passado para novas variaveis 
+			printf("%d\t", m[i][j]);
 		}
 		printf("\n");
 	}
-}	
+}		
