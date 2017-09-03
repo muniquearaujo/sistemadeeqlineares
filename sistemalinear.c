@@ -31,6 +31,26 @@ void zera(int m[NL][NC])
 		printf("\n");
 	}	
 	
+}
+
+//Função para fazer a substituição reversa
+
+void solucao(int m[NL][NC])
+{
+	int v[NL], i,j,soma=0;
+
+	v[NL-1]=m[NL-1][NC-1]/m[NL-1][NC-2];
+	
+	for(i=NL-2;i>=0;i--)
+	{
+		soma=0;
+		for(j=i+1;j<NL;j++)
+		{
+			soma=soma+m[i][j]*v[j];
+		}
+		v[i]=(m[i][NL]-soma)/m[i][i];
+	}
+	
 }	
 main()
 {
@@ -52,5 +72,8 @@ main()
 	}
 	//chamando a função
 	zera(m);
+	
+	//chamando a função
+	solucao(m);
 	
 }
