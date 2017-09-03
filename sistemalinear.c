@@ -37,18 +37,26 @@ void zera(int m[NL][NC])
 
 void solucao(int m[NL][NC])
 {
-	int v[NL], i,j,soma=0;
+	int x[NL], i,j,soma=0;
 
-	v[NL-1]=m[NL-1][NC-1]/m[NL-1][NC-2];
+	x[NL-1]=m[NL-1][NC-1]/m[NL-1][NC-2];
 	
 	for(i=NL-2;i>=0;i--)
 	{
 		soma=0;
 		for(j=i+1;j<NL;j++)
 		{
-			soma=soma+m[i][j]*v[j];
+			soma=soma+m[i][j]*x[j];
 		}
-		v[i]=(m[i][NL]-soma)/m[i][i];
+		x[i]=(m[i][NL]-soma)/m[i][i];
+	}
+	
+	//Impressão dos valores na tela
+	printf("\nA solução do sistema será:\n");
+	for(i=0;i<4;i++)
+	{
+		printf("x%d",i+1);
+		printf(":%d\n", x[i]);
 	}
 	
 }	
@@ -75,5 +83,4 @@ main()
 	
 	//chamando a função
 	solucao(m);
-	
 }
