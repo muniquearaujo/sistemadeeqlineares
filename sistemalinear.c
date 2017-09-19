@@ -3,10 +3,48 @@
 #define NC 5
 			
 FILE *fp;
-void zera(double m[NL][NC])
+
+//Função Pivoteamento
+int pivot(double m[NL][NC])
 {
-	int i,j,k;
-	double num;
+	int i,j,k,aux,t=0;
+	
+	for(j=0;j<NC;j++)				
+	{
+		for(i=j;i<NL;i++)
+		{
+			if(m[i][i]<m[i][j])
+			{
+				for(k=0;k<NC;k++)
+				{
+					aux=m[i][k];
+					m[i][k]=m[j][k];
+					m[j][k]=aux;
+				}
+				t++;
+				i++;
+			}
+		}
+	}			
+			
+	printf("\n\nMatriz com Pivoteamento:\n");
+	for(i=0;i<NL;i++)
+	{
+		for(j=0;j<NC;j++)
+		{ 
+			printf("%lf\t", m[i][j]);
+		}
+		printf("\n");
+	}
+	return(t);
+}
+//Método de Triangularização
+
+void zera(double m[NL][NC])		  
+{
+   	int i,j,k;
+   	double num;
+   			
 	
 	for(j=0;j<NC;j++)
 	{
@@ -32,7 +70,8 @@ void zera(double m[NL][NC])
 		printf("\n");
 	}	
 	
-}
+}	
+
 
 //Função para fazer a substituição reversa
 
@@ -81,6 +120,10 @@ main()
 		}
 		printf("\n");
 	}
+	//chamando a função
+	t=pivot(m);
+	printf("\nQuantidade de trocas:%d\n\n",t);
+	
 	//chamando a função
 	zera(m);
 	
