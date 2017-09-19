@@ -3,9 +3,10 @@
 #define NC 5
 			
 FILE *fp;
-void zera(int m[NL][NC])
+void zera(double m[NL][NC])
 {
-	int i,j,k,num;
+	int i,j,k;
+	double num;
 	
 	for(j=0;j<NC;j++)
 	{
@@ -26,7 +27,7 @@ void zera(int m[NL][NC])
 	{
 		for(j=0;j<NC;j++)
 		{ 
-			printf("%d\t", m[i][j]);
+			printf("%lf\t", m[i][j]);
 		}
 		printf("\n");
 	}	
@@ -35,15 +36,16 @@ void zera(int m[NL][NC])
 
 //Função para fazer a substituição reversa
 
-void solucao(int m[NL][NC])
+void solucao(double m[NL][NC])
 {
-	int x[NL], i,j,soma=0;
+	double x[NL], soma=0.0;
+	int i,j;
 
 	x[NL-1]=m[NL-1][NC-1]/m[NL-1][NC-2];
 	
 	for(i=NL-2;i>=0;i--)
 	{
-		soma=0;
+		soma=0.0;
 		for(j=i+1;j<NL;j++)
 		{
 			soma=soma+m[i][j]*x[j];
@@ -56,13 +58,14 @@ void solucao(int m[NL][NC])
 	for(i=0;i<4;i++)
 	{
 		printf("x%d",i+1);
-		printf(":%d\n", x[i]);
+		printf(":%lf\n", x[i]);
 	}
 	
 }	
 main()
 {
-	int m[NL][NC], i, j,k, num, t;
+	double m[NL][NC]; 
+	int i, j,k, t;
 	
 	//Abrindo arquivo para escrita
 	fp=fopen("matriz.dat", "r"); 
@@ -73,8 +76,8 @@ main()
 	{
 		for(j=0;j<NC;j++)
 		{
-			fscanf(fp, "%d", &m[i][j]); //lendo "scanf" cada um do arquivo e passado para novas variaveis 
-			printf("%d\t", m[i][j]);
+			fscanf(fp, "%lf", &m[i][j]); //lendo "scanf" cada um do arquivo e passado para novas variaveis 
+			printf("%lf\t", m[i][j]);
 		}
 		printf("\n");
 	}
