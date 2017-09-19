@@ -1,25 +1,37 @@
 #include<stdio.h>
-#define NL 4
-#define NC 5
+#include<stdlib.h>
 			
 FILE *fp;
 
+//Função Imprime
+void imprime(double **M, int dim)
+{
+	int i,j;
+	for(i=0;i<dim;i++)
+	{
+		for(j=0;j<(dim+1);j++)
+		{
+			printf("%lf\t", M[i][j]);
+		}
+		printf("\n");
+	}
+}
 //Função Pivoteamento
-int pivot(double m[NL][NC])
+int pivot(double **M, int dim)
 {
 	int i,j,k,aux,t=0;
 	
-	for(j=0;j<NC;j++)				
+	for(j=0;j<(dim+1);j++)				
 	{
-		for(i=j;i<NL;i++)
+		for(i=j;i<dim;i++)
 		{
-			if(m[i][i]<m[i][j])
+			if(M[i][i]<M[i][j])
 			{
-				for(k=0;k<NC;k++)
+				for(k=0;k<(dim+1);k++)
 				{
-					aux=m[i][k];
-					m[i][k]=m[j][k];
-					m[j][k]=aux;
+					aux=M[i][k];
+					M[i][k]=M[j][k];
+					M[j][k]=aux;
 				}
 				t++;
 				i++;
@@ -28,135 +40,136 @@ int pivot(double m[NL][NC])
 	}			
 			
 	printf("\n\nMatriz com Pivoteamento:\n");
-	for(i=0;i<NL;i++)
-	{
-		for(j=0;j<NC;j++)
-		{ 
-			printf("%lf\t", m[i][j]);
-		}
-		printf("\n");
-	}
+	imprime(M,dim);
 	return(t);
 }
-//Método de Triangularização
 
-void zera(double m[NL][NC])		  
+//Função de Triangularização
+void zera(double **M, int dim)
 {
-   	int i,j,k;
-   	double num;
-   			
+	int i,j,k;
+	double num;
 	
-	for(j=0;j<NC;j++)
+	for(j=0;j<(dim+1);j++)
 	{
-		for(i=0;i<NL; i++)
+		for(i=0;i<dim; i++)
 		{
 			if(i>j)
 			{
-				num=-(m[i][j]/m[j][j]);
-				for(k=0;k<NC;k++)
+				num=-(M[i][j]/M[j][j]);
+				for(k=0;k<(dim+1);k++)
 				{
-					m[i][k]=num*m[j][k]+m[i][k];
+					M[i][k]=num*M[j][k]+M[i][k];
 				}
 			}
 		}
 	}	
 	printf("\n\nMatriz Triangular Superior:\n");
-	for(i=0;i<NL;i++)
-	{
-		for(j=0;j<NC;j++)
-		{ 
-			printf("%lf\t", m[i][j]);
-		}
-		printf("\n");
-	}	
+	imprime(M,dim);	
 	
-}	
-
+}
 
 //Função para fazer a substituição reversa
 
-void solucao(double m[NL][NC])
+void solucao(double **M, int dim)
 {
-	double x[NL], soma=0.0;
+	double x[dim], soma=0.0;
 	int i,j;
 
-	x[NL-1]=m[NL-1][NC-1]/m[NL-1][NC-2];
+	x[dim-1]=M[dim-1][(dim+1)-1]/M[dim-1][(dim+1)-2];
 	
-	for(i=NL-2;i>=0;i--)
+	for(i=dim-2;i>=0;i--)
 	{
-		soma=0.0;
-		for(j=i+1;j<NL;j++)
+		soma=0;
+		for(j=i+1;j<dim;j++)
 		{
-			soma=soma+m[i][j]*x[j];
+			soma=soma+M[i][j]*x[j];
 		}
-		x[i]=(m[i][NL]-soma)/m[i][i];
+		x[i]=(M[i][dim]-soma)/M[i][i];
 	}
 	
 	//Impressão dos valores na tela
 	printf("\nA solução do sistema será:\n");
-	for(i=0;i<4;i++)
+	for(i=0;i<dim;i++)
 	{
 		printf("x%d",i+1);
 		printf(":%lf\n", x[i]);
 	}
 	
-}	
-void determinante(double m[NL][NC], int n)
+}
+
+//Função para o cálculo do Determinante
+void determinante(double **M, int dim, int n)
 {
-	double v,prod=1.0, soma=0.0; 
+	double v,prod=1.0, soma=0.0;
 	int i,j;
-	for(i=0;i<NL;i++)
+	for(i=0;i<dim;i++)
 	{
-		for(j=0;j<(NC);j++)
+		for(j=0;j<(dim+1);j++)
 		{
 			if(i==j)
 			{
 				//se número de troca positivo
 				if(n%2==0)
 				{
-					v=m[i][j];
+					v=M[i][j];
 					prod=prod*v;
 				}
 				//se número de troca negativo
 				else
 				{
-					v=-m[i][j];
+					v=-M[i][j];
 					prod=prod*v;
-				}		
+				}
 			}
 		}
 	}
 	printf("\nO Valor de Determinante é:%lf\n", prod);
 }
+				
 main()
 {
-	double m[NL][NC]; 
-	int i, j,k, t;
+	int i, j,k, num, t, dim;
+	double **M,a;
 	
 	//Abrindo arquivo para escrita
 	fp=fopen("matriz.dat", "r"); 
 	
-	printf("\nMatriz:\n");
+	i=fscanf(fp, "%d", &dim);
 	
-	for(i=0;i<NL;i++)
+	M=malloc(dim*sizeof(double*));
+	
+	for(i=0;i<dim;i++)
 	{
-		for(j=0;j<NC;j++)
+		M[i]=malloc((dim+1)*sizeof(double));
+	}	
+	i=j=0;
+	while(fscanf(fp,"%lf", &a)!=EOF)
+	{
+		M[i][j]=a;
+		j++;
+		if(j==dim+1)
 		{
-			fscanf(fp, "%lf", &m[i][j]); //lendo "scanf" cada um do arquivo e passado para novas variaveis 
-			printf("%lf\t", m[i][j]);
+			j=0;
+			i++;
 		}
-		printf("\n");
 	}
+	fclose(fp);
+	
+	printf("\nImpressão da Matriz:\n");
 	//chamando a função
-	t=pivot(m);
-	printf("\nQuantidade de trocas:%d\n\n",t);
+	imprime(M,dim);
 	
 	//chamando a função
-	zera(m);
+	t=pivot(M,dim);
+	printf("\nNúmero de trocas:%d\n\n", t);
 	
 	//chamando a função
-	solucao(m);
+	zera(M,dim);
 	
 	//chamando a função
-	determinante(m, t);
+	solucao(M, dim);
+	
+	//chamando a função
+	determinante(M, dim, t);
 }
