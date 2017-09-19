@@ -101,6 +101,33 @@ void solucao(double m[NL][NC])
 	}
 	
 }	
+void determinante(double m[NL][NC], int n)
+{
+	double v,prod=1.0, soma=0.0; 
+	int i,j;
+	for(i=0;i<NL;i++)
+	{
+		for(j=0;j<(NC);j++)
+		{
+			if(i==j)
+			{
+				//se número de troca positivo
+				if(n%2==0)
+				{
+					v=m[i][j];
+					prod=prod*v;
+				}
+				//se número de troca negativo
+				else
+				{
+					v=-m[i][j];
+					prod=prod*v;
+				}		
+			}
+		}
+	}
+	printf("\nO Valor de Determinante é:%lf\n", prod);
+}
 main()
 {
 	double m[NL][NC]; 
@@ -129,4 +156,7 @@ main()
 	
 	//chamando a função
 	solucao(m);
+	
+	//chamando a função
+	determinante(m, t);
 }
